@@ -1,13 +1,24 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const getGoals = async () => {
+    await fetch("https://next-todo.com/goals")
+      .then((res) => {
+        console.log("success");
+        return res.json();
+      })
+      .catch((error) => {
+        console.log("error");
+        return error;
+      });
+  };
+
+  getGoals();
+
   return (
     <>
       <Head>
-        <title>Create Next App</title>
+        <title>HELEN&apos;S TODO LIST</title>
       </Head>
       <main></main>
     </>
