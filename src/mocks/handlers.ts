@@ -44,13 +44,21 @@ let goals: { id: number, content: string }[] = [
 ]
 
 export const handlers = [
-    rest.get('https://next-todo.com/goals', (req, res, ctx) => {
+    rest.get('https://helen-next-todo.com/goals', (req, res, ctx) => {
+
+        const headers = req.headers;
+
         return res(
             ctx.status(200),
+            ctx.set("Connection", "keep-alive"),
+            ctx.set('Content-Type', 'application/json'),
+            ctx.set('Access-Control-Allow-Origin', 'http://localhost:3000'),
+            ctx.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'),
+            ctx.set('Access-Control-Allow-Headers', 'Content-Type'),
             ctx.json(goals)
         )
     }),
-    rest.get('https://next-todo.com/goals/:goalId', (req, res, ctx) => {
+    rest.get('https://helen-next-todo.com/goals/:goalId', (req, res, ctx) => {
         const { goalId } = req.params;
 
         if (typeof goalId !== "string") {
@@ -76,84 +84,84 @@ export const handlers = [
             ctx.json(result)
         )
     }),
-    rest.post('https://next-todo.com/goals', (req, res, ctx) => {
-        req.json().then(({ content }: { content: string }) => {
-            if (content === "") return res(ctx.status(501),
-                ctx.json({
-                    errorMessage: '목표를 입력해 주세요',
-                }),)
+    // rest.post('https://helen-next-todo.com/goals', (req, res, ctx) => {
+    //     req.json().then(({ content }: { content: string }) => {
+    //         if (content === "") return res(ctx.status(501),
+    //             ctx.json({
+    //                 errorMessage: '목표를 입력해 주세요',
+    //             }),)
 
-            goals.push({
-                id: goals.length + 1,
-                content,
-            })
+    //         goals.push({
+    //             id: goals.length + 1,
+    //             content,
+    //         })
 
-            return res(ctx.status(200))
-        });
-    }),
-    rest.delete('https://next-todo.com/goals/:goalId', (req, res, ctx) => {
-        const { goalId } = req.params;
+    //         return res(ctx.status(200))
+    //     });
+    // }),
+    // rest.delete('https://helen-next-todo.com/goals/:goalId', (req, res, ctx) => {
+    //     const { goalId } = req.params;
 
-        if (typeof goalId !== "string") {
-            return res(
-                ctx.status(501),
-                ctx.json({
-                    errorMessage: '다수의 목표를 삭제할 수 없습니다',
-                }),
-            )
-        }
+    //     if (typeof goalId !== "string") {
+    //         return res(
+    //             ctx.status(501),
+    //             ctx.json({
+    //                 errorMessage: '다수의 목표를 삭제할 수 없습니다',
+    //             }),
+    //         )
+    //     }
 
-        const result = goals.find(goal => goal.id === parseInt(goalId));
+    //     const result = goals.find(goal => goal.id === parseInt(goalId));
 
-        if (!result) return res(
-            ctx.status(501),
-            ctx.json({
-                errorMessage: '해당되는 목표가 없습니다',
-            }),
-        )
+    //     if (!result) return res(
+    //         ctx.status(501),
+    //         ctx.json({
+    //             errorMessage: '해당되는 목표가 없습니다',
+    //         }),
+    //     )
 
-        goals = [...goals.filter(goal => goal.id !== parseInt(goalId))];
+    //     goals = [...goals.filter(goal => goal.id !== parseInt(goalId))];
 
-        return res(ctx.status(200))
-    }),
-    rest.put('https://next-todo.com/goals/:goalId', (req, res, ctx) => {
-        const { goalId } = req.params;
+    //     return res(ctx.status(200))
+    // }),
+    // rest.put('https://helen-next-todo.com/goals/:goalId', (req, res, ctx) => {
+    //     const { goalId } = req.params;
 
-        if (typeof goalId !== "string") {
-            return res(
-                ctx.status(501),
-                ctx.json({
-                    errorMessage: '다수의 목표를 수정할 수 없습니다',
-                }),
-            )
-        }
+    //     if (typeof goalId !== "string") {
+    //         return res(
+    //             ctx.status(501),
+    //             ctx.json({
+    //                 errorMessage: '다수의 목표를 수정할 수 없습니다',
+    //             }),
+    //         )
+    //     }
 
-        req.json().then(({ content }: { content: string }) => {
-            if (content === "") return res(ctx.status(501),
-                ctx.json({
-                    errorMessage: '목표를 입력해 주세요',
-                }),)
+    //     req.json().then(({ content }: { content: string }) => {
+    //         if (content === "") return res(ctx.status(501),
+    //             ctx.json({
+    //                 errorMessage: '목표를 입력해 주세요',
+    //             }),)
 
-            const result = goals.find(goal => goal.id === parseInt(goalId));
+    //         const result = goals.find(goal => goal.id === parseInt(goalId));
 
-            if (!result) return res(
-                ctx.status(501),
-                ctx.json({
-                    errorMessage: '해당되는 목표가 없습니다',
-                }),
-            )
+    //         if (!result) return res(
+    //             ctx.status(501),
+    //             ctx.json({
+    //                 errorMessage: '해당되는 목표가 없습니다',
+    //             }),
+    //         )
 
-            goals = [...goals, {
-                id: result.id,
-                content,
-            }]
+    //         goals = [...goals, {
+    //             id: result.id,
+    //             content,
+    //         }]
 
-            return ctx.status(200)
-        });
+    //         return ctx.status(200)
+    //     });
 
 
-        return res(
-            ctx.status(200),
-        )
-    }),
+    //     return res(
+    //         ctx.status(200),
+    //     )
+    // }),
 ]
